@@ -1,0 +1,16 @@
+LDFLAGS is specified too early, causing sgutils2 not to be found at the right time.
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -65,10 +65,10 @@
+ default: all
+ 
+ ledmon: $(OUTDIR)/.depend $(LEDMON_OBJECTS)
+-	$(CC) $(LDFLAGS) $(LDLIBS) $(LEDMON_OBJECTS) -o $@
++	$(CC) $(LDLIBS) $(LEDMON_OBJECTS) -o $@ $(LDFLAGS)
+ 
+ ledctl: $(OUTDIR)/.depend $(LEDCTL_OBJECTS)
+-	$(CC) $(LDFLAGS) $(LDLIBS) $(LEDCTL_OBJECTS) -o $@
++	$(CC) $(LDLIBS) $(LEDCTL_OBJECTS) -o $@ $(LDFLAGS)
+ 
+ $(OUTDIR)/%.o: %.c
+ 	$(CC) $(CFLAGS) $(DEFFLAGS) $(INCFLAGS) -c $< -o $@

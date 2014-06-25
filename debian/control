@@ -1,0 +1,24 @@
+Source: ledmon
+Section: admin
+Priority: optional
+Maintainer: Daniel Jared Dominguez <Jared_Dominguez@Dell.com>
+Build-Depends: debhelper (>= 9), perl, libsgutils2-dev
+Standards-Version: 3.9.5
+Homepage: http://ledmon.sourceforge.net/
+Vcs-Git: git://linux.dell.com/debian/ledmon.git
+Vcs-Browser: http://linux.dell.com/git/debian/ledmon.git
+
+Package: ledmon
+Architecture: linux-any
+Depends: ${shlibs:Depends}, ${misc:Depends}, openipmi
+Description: Enclosure LED Utilities
+ ledmon and ledctl are userspace tools designed to control storage
+ enclosure LEDs. The user must have root privileges to use these tools.
+ .
+ These tools use the SGPIO and SES-2 protocols to monitor and control LEDs.
+ They been verified to work with Intel(R) storage controllers (i.e. the
+ Intel(R) AHCI controller) and have not been tested with storage controllers of
+ other vendors (especially SAS/SCSI controllers).
+ .
+ For backplane enclosures attached to ISCI controllers, support is limited to
+ Intel(R) Intelligent Backplanes.

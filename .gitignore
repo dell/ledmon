@@ -9,3 +9,4 @@ ledctl
 *.bak
 .depend
 *.swp
+.pc

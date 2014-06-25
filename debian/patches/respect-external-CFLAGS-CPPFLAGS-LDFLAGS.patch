@@ -1,0 +1,40 @@
+Description: Respect external CFLAGS, CPPFLAGS, LDFLAGS
+Author: Kamal Mostafa <kamal@whence.com>
+
+--- ledmon-0.79.orig/src/Makefile
++++ ledmon-0.79/src/Makefile
+@@ -55,10 +55,14 @@ LEDCTL_OBJECTS=\
+ 	$(OUTDIR)/ledctl.o	\
+ 	$(OBJECTS)
+ 
+-CFLAGS=-O0 -g -Wall
+ DEFFLAGS=-D_DEBUG -D_GNU_SOURCE -D_BSD_SOURCE -DDMALLOC_DISABLE
+ INCFLAGS=-I../config
+-LDFLAGS=-O0 -g $(DEFFLAGS) -lsgutils2
++
++# CFLAGS+=-O0 -g
++# LDFLAGS+=-O0 -g
++CFLAGS+=-Wall
++CPPFLAGS+=$(DEFFLAGS) $(INCFLAGS)
++LDFLAGS+=-lsgutils2
+ 
+ SOURCES:=$(shell find -name "*.[cC]" -print)
+ 
+@@ -71,7 +75,7 @@ ledctl: $(OUTDIR)/.depend $(LEDCTL_OBJEC
+ 	$(CC) $(LDLIBS) $(LEDCTL_OBJECTS) -o $@ $(LDFLAGS)
+ 
+ $(OUTDIR)/%.o: %.c
+-	$(CC) $(CFLAGS) $(DEFFLAGS) $(INCFLAGS) -c $< -o $@
++	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+ 
+ all: $(OUTDIR)/.depend ledmon ledctl
+ 
+@@ -93,7 +97,7 @@ mrproper: clean
+ 
+ $(OUTDIR)/.depend: $(SOURCES)
+ 	mkdir -p $(OUTDIR)
+-	$(CC) $(CFLAGS) $(DEFFLAGS) $(INCFLAGS) -M $^ | sed 's/^[a-z,0-9]/$(subst /,\/,$(OUTDIR))\/&/' > $(OUTDIR)/.depend
++	$(CC) $(CFLAGS) $(CPPFLAGS) -M $^ | sed 's/^[a-z,0-9]/$(subst /,\/,$(OUTDIR))\/&/' > $(OUTDIR)/.depend
+ 
+ ifeq ($(filter install uninstall depend clean mrproper,$(MAKECMDGOALS)),)
+     -include $(OUTDIR)/.depend

@@ -1,0 +1,74 @@
+ledmon (0.79-1) unstable; urgency=medium
+
+  * Acknowledge NMUs. (Closes: #708673)
+  * Putting all this into git.
+  * Add VCS information to debian/control.
+
+ -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Wed, 25 Jun 2014 16:44:07 -0500
+
+ledmon (0.79-0.2) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix FTBFS on non-Linux  with "Architecture: linux-any"
+
+ -- Kamal Mostafa <kamal@debian.org>  Tue, 03 Dec 2013 07:16:30 -0800
+
+ledmon (0.79-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * New upstream release.
+  * Adds support for NVME SSD devices (uses nvme/nvmhci block driver). 
+  * Fix small coding error in ledctl.pod
+  * Update help info regarding reporting bugs
+  * Make sure addr is null-terminated
+  * Check if the directory 'holders' exists
+  * Check device for NULL before dereferencing
+  * ledctl documentation improvements
+  * Do not use ISO C99 standard
+  * Do not send LED command if state of block device has not changed
+  * Change ledmon's behavior during rebuild. 
+  * Correct some style problems using kernel's checkpatch.
+  * Remove indentation info
+  * Correct indentation according to the Linux coding style using indent
+  * Update Copyright year to 2013
+  * Fix support for Dell PCIe SSD Devices
+  * More minor fixes revealed by a coverity scan
+  * Minor fixes revealed by a coverity scan
+
+ -- Kent Baxley <kb4xley@gmail.com>  Wed, 27 Nov 2013 15:33:27 -0600
+
+ledmon (0.74-1) unstable; urgency=low
+
+  * New upstream release:
+  * restart of the ledmon's internal state when an unrecoverable error occurs
+    (e.g. lack of disk's location)
+  * logging level for not supported patterns changed from 'warning' to 'debug'
+  * more detailed information about device change (name changed, missing)
+  * added extra checks against device presence in sysfs (device may disappear
+    at anytime: during rescan, initialization, sending command)
+  * pattern "locate_off" fixed
+  * SES-2 support for enclosures
+  * New patterns (SES-2) in ledctl for drives in enclosures
+  * Improved LED blinking and slot locations for AHCI and SCSI DA
+  * ledctl and ledmon were converted to the raw bitstream (TX_GP) interface,
+    so they do not need additional SGPIO support in the kernel now
+    (by Dan Williams <dan.j.williams@intel.com>)
+  * the way ledctl works has been changed: so far turning on some LEDs
+    did not change the state of all other LEDs of all controllers,
+    now turning on some LEDs turns off all other LEDs of all controllers
+  * ledctl's manual was corrected and updated
+
+ -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Thu, 23 Aug 2012 16:28:32 -0500
+
+ledmon (0.32-1) unstable; urgency=low
+
+  * New upstream release
+  * Fixes issue where HOTSPARE had higher priority than REBUILD
+
+ -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Mon, 05 Mar 2012 11:41:06 -0600
+
+ledmon (0.31-1) unstable; urgency=low
+
+  * Initial release (Closes: #658815)
+
+ -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Mon, 23 Jan 2012 13:45:41 -0600

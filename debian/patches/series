@@ -1,0 +1,2 @@
+ldflags-order.patch
+respect-external-CFLAGS-CPPFLAGS-LDFLAGS.patch
