@@ -1,3 +1,9 @@
+ledmon (0.79-2) unstable; urgency=high
+
+  * Fix for 3.13 kernel change (LP: #1349920)
+
+ -- Daniel Jared Dominguez <Jared_Dominguez@Dell.com>  Wed, 30 Jul 2014 14:19:11 -0500
+
 ledmon (0.79-1) unstable; urgency=medium
 
   * Acknowledge NMUs. (Closes: #708673)

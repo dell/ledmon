@@ -1,2 +1,3 @@
 ldflags-order.patch
 respect-external-CFLAGS-CPPFLAGS-LDFLAGS.patch
+sysfs-bool-values.patch

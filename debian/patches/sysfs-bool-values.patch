@@ -1,0 +1,87 @@
+commit 6f7d38bbe5d7b13c84987cf3b3b550a11c39392e (HEAD, refs/remotes/origin/master, refs/remotes/origin/HEAD, refs/heads/upstream)
+Author: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
+Date:   Tue Jul 29 13:49:05 2014 +0200
+
+    Recognize bool values in sysfs
+    
+    The type of libahci parameter ahci_em_messages was changed from int to
+    bool in kernel v3.13, which caused AHCI HBAs to not be detected
+    properly.
+    
+    Reported-and-tested-by: Paul Boven <boven@jive.nl>
+    Signed-off-by: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
+
+diff --git a/src/cntrl.c b/src/cntrl.c
+index 2e6509b..e5170a2 100644
+--- a/src/cntrl.c
++++ b/src/cntrl.c
+@@ -216,8 +216,11 @@ static unsigned int _ahci_em_messages(const char *path)
+ 	if (get_int(path, 0, "driver/module/parameters/ahci_em_messages") != 0)
+ 		return 1;
+ 
+-	if (!get_int("", 0, "sys/module/libahci/parameters/ahci_em_messages"))
+-		return 0;
++	/* parameter type changed from int to bool since kernel v3.13 */
++	if (!get_int("", 0, "sys/module/libahci/parameters/ahci_em_messages")) {
++		if (!get_bool("", 0, "sys/module/libahci/parameters/ahci_em_messages"))
++			return 0;
++	}
+ 
+ 	if (snprintf(buf, sizeof(buf), "%s/%s", path, "driver") < 0)
+ 		return 0;
+diff --git a/src/utils.c b/src/utils.c
+index 36e4147..fca00a8 100644
+--- a/src/utils.c
++++ b/src/utils.c
+@@ -86,6 +86,23 @@ char *get_text(const char *path, const char *name)
+ }
+ 
+ /*
++ * Function returns integer value (1 or 0) based on a boolean value ('Y' or 'N')
++ * read from a text file. See utils.h for details.
++ */
++int get_bool(const char *path, int defval, const char *name)
++{
++	char *p = get_text(path, name);
++	if (p) {
++		if (*p == 'Y')
++			defval = 1;
++		else if (*p == 'N')
++			defval = 0;
++		free(p);
++	}
++	return defval;
++}
++
++/*
+  * Function returns 64-bit unsigned integer value read from a text file. See
+  * utils.h for details.
+  */
+diff --git a/src/utils.h b/src/utils.h
+index c982113..5a0a76c 100644
+--- a/src/utils.h
++++ b/src/utils.h
+@@ -111,6 +111,23 @@ uint64_t get_uint64(const char *path, uint64_t defval, const char *name);
+ char *get_text(const char *path, const char *name);
+ 
+ /**
++ * @brief Reads boolean value from a text file.
++ *
++ * This function assumes that the only text in a file is the requested value to
++ * read. The recognized boolean values are in the format 'Y' for True and 'N'
++ * for False. In case of an error while reading from file the function will
++ * return a value stored in defval argument.
++ *
++ * @param[in]      path           Path where a file is located.
++ * @param[in]      defval         Default value to be returned in case of error.
++ * @param[in]      name           Name of a file to be read.
++ *
++ * @return Value read from a file if successful, otherwise a value stored in
++ *         defval argument. 1 is returned for True, 0 for False.
++ */
++int get_bool(const char *path, int defval, const char *name);
++
++/**
+  * @brief Writes a text to file.
+  *
+  * This function writes a text to a file and return the number of bytes written.
